@@ -15,9 +15,12 @@ class Movies extends Component {
 
 
     render() { 
+        if(this.state.movies.length === 0 ) return <div className="container mt-5"><p>There are no movies in the database.</p></div>
         return (
+            
             <React.Fragment>
-                <div className="container">
+                <div className="container mt-5">
+                <p>Showing {this.state.movies.length} movies in the database.</p>
                     <table className="table">
                         <thead>
                             <tr>
