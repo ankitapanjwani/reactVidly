@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { getMovies } from './services/fakeMovieService';
 import Like from  './like';
 import Pagination from './pagination';
-import {paginate} from './'
+import {paginate} from './utils/paginate';
+import Listgroup from './listgroup';
+import { getGenres } from './services/fakeGenreService';
 class Movies extends Component {
     state = {
         movies: getMovies(),
+        genres: getGenres(),
         pageSize: 4,
         currentPage: 1
      };
@@ -30,17 +33,22 @@ class Movies extends Component {
 
     render() {
         const {length: count} = this.state.movies;
-        const {pageSize, currentPage} = this.state;
+        const {pageSize, currentPage,movies: allMovies} = this.state;
         if(count === 0 ) return <div className="container mt-5"><p>There are no movies in the database.</p></div>
 
         
-
+        const movies = paginate(allMovies,currentPage,pageSize);
 
         return (
             
             <React.Fragment>
                 <div className="container mt-5">
-                <p>Showing {count} movies in the database.</p>
+                  <div className="row">
+                        <div className="col-md-2">
+                        <Listgroup items={this.state.}/>
+                        </div>
+                        <div className="col-md-10">
+                        <p>Showing {count} movies in the database.</p>
                     <table className="table">
                         <thead>
                             <tr>
@@ -53,7 +61,7 @@ class Movies extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.movies.map(movie =>(
+                            {movies.map(movie =>(
                                 <tr key={movie._id}>
                                     <td>{movie.title}</td>
                                     <td>{movie.genre.name}</td>
@@ -70,6 +78,9 @@ class Movies extends Component {
                     pageSize={pageSize} 
                     currentPage={currentPage} 
                     onPagechange={this.handlePageChange}/>
+                        </div>
+                  </div>
+               
                 </div>
             </React.Fragment>
            
